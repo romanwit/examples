@@ -1,0 +1,98 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1251">
+<link href="bootstrap.css" rel="stylesheet">
+<script src="jq_files/bootstrap.js"></script>
+<script src="jq_files/jquery-3.js"></script>
+</head>
+<body>
+<input id="t" type="text">
+<script type="text/javascript">
+	
+	var rev=false;
+
+	var sort_by = function(field, reverse, primer){
+
+   var key = primer ? 
+       function(x) {return primer(x[field])} : 
+       function(x) {return x[field]};
+
+   reverse = !reverse ? 1 : -1;
+
+   return function (a, b) {
+       return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
+     } 
+}
+	
+	
+  $('#t').keyup(function() {
+	var $rows = $('tr:not(\'.tabhead\')');	
+    var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+    $rows.show().filter(function() {
+        var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+			
+        return !~text.indexOf(val);
+    }).hide();
+  });
+	
+	var get_table = function(field) {
+
+		  $(".table.table-striped").remove();
+		
+			$.getJSON( "grid.json", function( data ) 
+				{
+        
+				if (field!="")
+					{
+				  data.sort(sort_by(field, rev, function(a){return a.toUpperCase()}));
+					}
+
+				var itemsheader=[];
+				var items = [];
+				var i = 0;
+				$.each( data, function( key, val ) 
+				{
+					if (i==0)
+					{
+
+					itemsheader.push("<thead><tr class='tabhead'>");
+					$.each(val, function(key0, val0) 
+						{
+						itemsheader.push("<th><input class='btn btn-default' type='button' value='"+ key0 + "' onclick=\"get_table('" + key0 + "');\"></th>");
+						});
+					itemsheader.push("</tr></thead><tbody>");
+					}
+
+					items.push("<tr>");
+					$.each(val, function(key0, val0) 
+						{	
+						items.push( "<td id='" + key + key0 + "'>" + val0 + "</td>" );
+						});    
+				items.push("</tr>");
+				i++;
+				});//each
+				items.push("</tbody>");
+
+
+			$( "<table/>", 
+			{
+				"class": "table table-striped",
+				html: itemsheader.join( "" )
+			}).append(items.join("")).appendTo( "body" );
+		});//getJson
+		
+		
+		if (!rev)
+			{rev=true;}
+		else
+			{rev=false;}
+	};
+	
+	$(document).ready(function(){
+    
+			get_table("");	
+		});
+
+
+</script>
+
+</body></html>
