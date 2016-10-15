@@ -1,1 +1,1 @@
-examples
+examples of algorithms
