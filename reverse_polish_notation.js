@@ -30,7 +30,7 @@ function evalRPN(tokens) {
 		if ((t=="*")||(t=="/")||(t=="-")||(t=="+")) {
 			tokens.splice(i + 1, 0, num);
 			tokens.splice(i-2, 3);
-			i = 0;
+			i = i - 1;
 		}
 		else {
 			i++;
