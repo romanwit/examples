@@ -1,57 +1,33 @@
-var to_be_analyzed = "(t{t})[r)";
+var to_analyze = "(t{t})[r)";
 
-var pairs = [['(', ')'], ['{', '}'], ['[', ']'] ];
+alert(isBalanced(to_analyze));
 
-var do_break = false;
+function isBalanced(str) {
+  var i, ch, expectedBracket;
 
-for (var j=0; j<pairs.length; j++) {
-	to_be_analyzed = check_brackets(to_be_analyzed, j);
-}
+  var temp = [];
+  var len = str.length;
 
-var check = true;
+  var openingBrackets = ['[', '{', '('];
+  var closingBrackets = [']', '}', ')'];
 
-for (var j=0; j<pairs.length; j++) {
-	for (var k=0; k<pairs[j].length;k++) {
-		if (to_be_analyzed.indexOf(pairs[j][k])!=-1) {
-			check = false;
-			break;
-		}
-	}
-}
-alert(check);
+  for (i = 0; i < len; i++) {
+    ch = str[i];
 
-function check_brackets (to_analyze, i) {
-	var pair_one = pairs[i][0];
-	var pair_two = pairs[i][1];
-	var one_pos = to_analyze.indexOf(pair_one);
-	var two_pos = to_analyze.lastIndexOf(pair_two);
-	if ( (one_pos!=-1) && (two_pos!=-1) )
-	{
-		to_analyze = cut_it(to_analyze, one_pos);
-		two_pos = to_analyze.lastIndexOf(pair_two);
-		to_analyze = cut_it(to_analyze, two_pos);
-		to_analyze = check_brackets(to_analyze, i);
-		if (do_break) {return to_analyze;}
-	}
-	else {
-		do_break = true;
-		return to_analyze;
-	}
-}
+    if (openingBrackets.indexOf(ch) > -1) {
+      temp.push(ch);
+    } else if (closingBrackets.indexOf(ch) > -1) {
 
-function cut_it(to_cut, position) {
-	var res = "";
-	
-	if (position == 0) {
-		res = to_cut.substr(position + 1);
-	}		
-	if ( (position < to_cut.length - 1) && (position >0) ) {
-		res = to_cut.substr(0, position) + to_cut.substr(position + 1);
-	} 
-	
-	if (position == to_cut.length - 1) {
-		res = to_cut.substr(0, position);
-	}
-	
-	return res;
+      expectedBracket = openingBrackets[closingBrackets.indexOf(ch)];
+      if (temp.length === 0 || (temp.pop() !== expectedBracket)) {
+        return false;
+      }
+
+    } else {
+      // Ignore the characters which do not match valid Brackets symbol
+      continue;
+    }
+  }
+
+  return (temp.length === 0);
 }
