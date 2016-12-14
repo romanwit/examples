@@ -1,3 +1,4 @@
+#
 def ways(di, offset, steps):
     global mem, dimensions
     if steps in mem[di] and offset in mem[di][steps]:
