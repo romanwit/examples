@@ -45,3 +45,15 @@ function countMines(board, row, col) {
 function isValid(board, row, col) {
   return row >= 0 && row < board.length && col >= 0 && col < board[0].length;
 }
+
+/*
+let board = [
+  ['E', 'E', 'E', 'E', 'E'],
+  ['E', 'E', 'M', 'E', 'E'],
+  ['E', 'E', 'E', 'E', 'E'],
+  ['E', 'E', 'E', 'E', 'E']
+];
+
+console.log(updateBoard(board, [3, 0]));
+
+*/
